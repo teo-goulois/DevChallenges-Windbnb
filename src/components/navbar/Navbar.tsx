@@ -8,19 +8,33 @@ import { PostType } from "../../types/Types";
 
 interface Props {
   data: PostType[];
+  setFilteredDatas: React.Dispatch<React.SetStateAction<PostType[]>>;
 }
 
-const Navbar = ({ data }: Props) => {
-  const [inputValue, setInputValue] = useState<string>(
-    `${data[0].city}, ${data[0].country}`
-  );
-  const [searchIsOpen, setSearchIsOpen] = useState<boolean>(true);
-  console.log(data);
+const Navbar = ({ data, setFilteredDatas }: Props) => {
+  const [searchIsOpen, setSearchIsOpen] = useState<boolean>(false);
+  const [formValues, setFormValues] = useState({
+    input: "",
+    location: {
+      country: "Finland",
+      city: "Helsinki",
+    },
+    guests: {
+      adults: 0,
+      children: 0,
+    },
+  });
 
   return (
-    <div className="p-4 flex flex-col md:flex-row md:justify-between md:items-center md:px-12 px-4">
+    <div className="p-4 flex flex-col md:flex-row md:justify-between md:items-center md:px-12 px-4 font-['Mulish']">
       {searchIsOpen && (
-        <SearchModal data={data} setSearchIsOpen={setSearchIsOpen} />
+        <SearchModal
+          data={data}
+          setSearchIsOpen={setSearchIsOpen}
+          setFilteredDatas={setFilteredDatas}
+          formValues={formValues}
+          setFormValues={setFormValues}
+        />
       )}
       {/* logo */}
       <img
@@ -33,21 +47,26 @@ const Navbar = ({ data }: Props) => {
         {/* city */}
         <input
           onFocus={() => setSearchIsOpen(true)}
-          className=" grow px-2 py-4 h-full outline-none border-r-2 border-r-[#F2F2F2]"
+          className="w-full grow px-2 py-4 h-full outline-none border-r-2 border-r-[#F2F2F2]"
           type="text"
-          value={inputValue}
+          value={`${formValues.location.city}, ${formValues.location.country}`}
         />
         {/* guess */}
         <input
           onFocus={() => setSearchIsOpen(true)}
-          className="grow p-2 py-4 h-full outline-none border-r-2 border-r-[#F2F2F2] text-ligth"
+          className="w-full grow p-2 py-4 h-full outline-none border-r-2 border-r-[#F2F2F2] text-ligth"
           type="text"
           placeholder="Add guests"
+          value={
+            formValues.guests.adults + formValues.guests.children !== 0
+              ? `${formValues.guests.adults + formValues.guests.children}`
+              : ""
+          }
         />
         {/* submit button */}
         <button
           onClick={() => setSearchIsOpen(true)}
-          className="grow-0 mx-4 w-[17.05px] h-[17.06px] "
+          className="mx-2 md:mx-4 w-[50px] h-[17.06px] "
           type="button"
           aria-label="search button"
         >

@@ -8,7 +8,7 @@ import Main from "./components/main/Main";
 import { PostType } from "./types/Types";
 
 function App() {
-  const [data, setData] = useState<PostType[]>([
+  const [data] = useState<PostType[]>([
     {
       city: "Helsinki",
       country: "Finland",
@@ -178,11 +178,12 @@ function App() {
         "https://images.unsplash.com/photo-1523755231516-e43fd2e8dca5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1275&q=80",
     },
   ]);
+  const [filteredDatas, setFilteredDatas] = useState<PostType[]>(data);
 
   return (
     <div className="App">
-      <Navbar data={data} />
-      <Main />
+      <Navbar data={data} setFilteredDatas={setFilteredDatas} />
+      <Main data={filteredDatas} />
     </div>
   );
 }

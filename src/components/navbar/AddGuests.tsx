@@ -1,31 +1,66 @@
 import React from "react";
+import { formValuesType } from "../../types/Types";
 
 interface Props {
-    addedGuests: number
-    setAddedGuests: React.Dispatch<React.SetStateAction<number>>
+  title: "adults" | "children";
+  desc: string;
+  formValues: formValuesType;
+  setFormValues: React.Dispatch<React.SetStateAction<formValuesType>>;
 }
 
-const AddGuests = ({addedGuests, setAddedGuests} :Props) => {
+const AddGuests = ({ title, desc, formValues, setFormValues }: Props) => {
   return (
     <div className="my-2 flex flex-col items-start">
-      <h2 className="text-primary font-bold">Adults</h2>
-      <p className="text-ligth text-sm font-normal">Ages 13 or above</p>
+      <h2 className="text-primary font-bold capitalize">{title}</h2>
+      <p className="text-ligth text-sm font-normal">{desc}</p>
       <div className="flex py-2">
         <button
           type="button"
           onClick={() => {
-            if (addedGuests === 0) return;
-            setAddedGuests((prev) => prev - 1);
+            if (formValues.guests[title] === 0) return;
+            if (title === "adults") {
+              setFormValues((prev) => ({
+                ...prev,
+                guests: {
+                  ...prev.guests,
+                  adults: prev.guests[title] - 1,
+                },
+              }));
+            } else {
+              setFormValues((prev) => ({
+                ...prev,
+                guests: {
+                  ...prev.guests,
+                  children: prev.guests[title] - 1,
+                },
+              }));
+            }
           }}
           className="border rounded w-6 h-6 flex justify-center items-end text-secondary mr-4"
         >
           -
         </button>
-        {addedGuests}
+        {formValues.guests[title]}
         <button
           type="button"
           onClick={() => {
-            setAddedGuests((prev) => prev + 1);
+            if (title === "adults") {
+              setFormValues((prev) => ({
+                ...prev,
+                guests: {
+                  ...prev.guests,
+                  adults: prev.guests[title] + 1,
+                },
+              }));
+            } else {
+              setFormValues((prev) => ({
+                ...prev,
+                guests: {
+                  ...prev.guests,
+                  children: prev.guests[title] + 1,
+                },
+              }));
+            }
           }}
           className="border rounded w-6 h-6 flex justify-center items-end text-secondary ml-4"
         >

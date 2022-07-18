@@ -1,33 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // Components
 import AddGuests from "./AddGuests";
-import SearchButton from "./SearchButton";
 
 // Icons
-import { CloseIcon } from "../../utilities/Icons";
-import { SearchIcon } from "../../utilities/Icons";
 import { LocationIcon } from "../../utilities/Icons";
 // Types
-import { PostType } from "../../types/Types";
+import { formValuesType, PostType } from "../../types/Types";
 
 interface Props {
   data: PostType[];
   setOpenTab: React.Dispatch<React.SetStateAction<string>>;
   openTab: string;
-  childrenNumber: number;
-  adultsNumber: number;
-  setAdultsNumber: React.Dispatch<React.SetStateAction<number>>;
-  setChildrenNumber: React.Dispatch<React.SetStateAction<number>>;
+  formValues: formValuesType;
+  setFormValues: React.Dispatch<React.SetStateAction<formValuesType>>;
 }
 
-const Sugestions = ({
-  openTab,
-  data,
-  childrenNumber,
-  setChildrenNumber,
-  adultsNumber,
-  setAdultsNumber,
-}: Props) => {
+const Sugestions = ({ openTab, data, formValues, setFormValues }: Props) => {
+  const [datas, setDatas] = useState<PostType[]>(data);
+
+  useEffect(() => {
+    setDatas(data);
+  }, [data]);
+
+  useEffect(() => {
+    if (formValues.input.length > 0) {
+      const newDatas: PostType[] = [];
+      data.map(
+        (item) => item.city.startsWith(formValues.input) && newDatas.push(item)
+      );
+      setDatas(newDatas);
+    }
+  }, [formValues.input, data]);
+
   return (
     <div className="w-full flex grow-[2] ">
       {/* location tab */}
@@ -38,10 +42,19 @@ const Sugestions = ({
       >
         {
           /* openTab === "location" && */
-          data.map((item, index) => {
-            if (index > 3) return;
+          datas.map((item, index) => {
+            if (index > 3) return undefined;
             return (
               <div
+                onClick={() => {
+                  setFormValues((prev) => ({
+                    ...prev,
+                    location: {
+                      country: item.country,
+                      city: item.city,
+                    },
+                  }));
+                }}
                 className={`cursor-pointer flex justify-start items-center text-gray font-normal p-4 m-2 border-2 border-white hover:border-ligth ${
                   openTab === "guests" && "hidden"
                 }`}
@@ -63,16 +76,22 @@ const Sugestions = ({
             openTab === "location" && "hidden"
           }`}
         >
-          {/* adults */}
-          <AddGuests
-            addedGuests={adultsNumber}
-            setAddedGuests={setAdultsNumber}
-          />
-          {/* children */}
-          <AddGuests
-            addedGuests={childrenNumber}
-            setAddedGuests={setChildrenNumber}
-          />
+          <div>
+            {/* adults */}
+            <AddGuests
+              title={"adults"}
+              desc={"Ages 13 or above"}
+              formValues={formValues}
+              setFormValues={setFormValues}
+            />
+            {/* children */}
+            <AddGuests
+              title={"children"}
+              desc={"Ages 2-12"}
+              formValues={formValues}
+              setFormValues={setFormValues}
+            />
+          </div>
         </div>
       }
     </div>
