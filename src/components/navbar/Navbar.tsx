@@ -14,7 +14,7 @@ interface Props {
 const Navbar = ({ data, setFilteredDatas }: Props) => {
   const [searchIsOpen, setSearchIsOpen] = useState<boolean>(false);
   const [formValues, setFormValues] = useState({
-    input: "",
+    input: '',
     location: {
       country: "Finland",
       city: "Helsinki",
@@ -24,6 +24,7 @@ const Navbar = ({ data, setFilteredDatas }: Props) => {
       children: 0,
     },
   });
+  
 
   return (
     <div className="p-4 flex flex-col md:flex-row md:justify-between md:items-center md:px-12 px-4 font-['Mulish']">

@@ -20,7 +20,7 @@ const Main = ({data}: Props) => {
         <p className='font-normal text-sm'>{`${showNumberOfStay( )} stays`}</p>
       </div>
 
-      <div className='flex flex-wrap justify-center'>
+      <div className='flex flex-wrap  md:px-8'>
         {data.map((item, index) => {
           return <Post item={item} />
         })}

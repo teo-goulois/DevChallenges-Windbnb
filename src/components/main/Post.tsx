@@ -10,11 +10,15 @@ interface Props {
 
 const Post = ({ item }: Props) => {
   return (
-    <div onClick={() => console.log("click")} className="m-2 cursor-pointer  ">
+    <div
+      onClick={() => console.log("click")}
+      className="m-2 cursor-pointer min-w-[350px] md:min-w-[395px] md:max-w-[600px] grow basis-0"
+    >
       {/* image */}
-      <div className="rounded-3xl overflow-hidden my-2  md:max-w-[395px] max-h-[238.35px] md:max-h-[269px]">
-        <img sizes="" src={item.photo} alt="flat" />
-      </div>
+      <div
+        style={{ backgroundImage: `url("${item.photo}")` }}
+        className="after:content-[''] after:block after:mt-[75%] rounded-3xl overflow-hidden my-2 bg-cover w-full "
+      ></div>
       {/* desc */}
       <div className="flex items-center justify-between">
         <div className="flex justify-center items-center">
